@@ -1,101 +1,41 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login PORSENI MTS</title>
+  <meta charset="UTF-8">
+  <title>Dashboard PORSENI</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #74ebd5, #ACB6E5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+      font-family: Arial, sans-serif;
     }
-
-    .login-container {
-      background-color: #fff;
-      padding: 30px 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-      width: 300px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    .input-group {
-      margin-bottom: 15px;
-    }
-
-    .input-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .input-group input {
-      width: 100%;
+    nav {
+      background-color: #4CAF50;
       padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      background-color: #007BFF;
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .btn:hover {
-      background-color: #0056b3;
-    }
-
-    .error {
-      color: red;
       text-align: center;
-      margin-bottom: 10px;
+    }
+    nav a {
+      color: white;
+      padding: 14px 20px;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 18px;
+    }
+    nav a:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
+  <!-- Menu Navigasi -->
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="input-skor.html">Input Skor</a>
+    <a href="admin-panel.html">Admin Panel</a>
+  </nav>
 
-  <div class="login-container">
-    <h2>Login PORSENI</h2>
-    <div id="errorMessage" class="error"></div>
-    <div class="input-group">
-      <label for="accessCode">Kode Akses</label>
-      <input type="password" id="accessCode" placeholder="Masukkan kode akses">
-    </div>
-    <button class="btn" onclick="login()">Login</button>
-  </div>
+  <!-- Konten Halaman -->
+  <h1>Selamat datang di Dashboard PORSENI</h1>
+  <p>Gunakan menu di atas untuk mengakses halaman lainnya.</p>
 
-  <script>
-    const correctAccessCode = "porseni2025"; // Ganti dengan kode akses yang kamu inginkan
-
-    function login() {
-      const input = document.getElementById("accessCode").value;
-      const error = document.getElementById("errorMessage");
-
-      if (input === correctAccessCode) {
-        window.location.href = "dashboard.html"; // arahkan ke halaman utama setelah login
-      } else {
-        error.textContent = "Kode akses salah. Silakan coba lagi!";
-      }
-    }
-  </script>
-
+  <!-- Konten Dashboard lainnya bisa kamu tambahkan di sini -->
 </body>
 </html>
