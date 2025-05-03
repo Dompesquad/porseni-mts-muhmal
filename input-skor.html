@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Input Skor Pertandingan</title>
+</head>
+<body>
+  <h2>Input Skor Pertandingan</h2>
+  <form id="formSkor">
+    <label>Cabang Lomba:
+      <select name="cabang" required>
+        <option value="Futsal">Futsal</option>
+        <option value="Voli">Voli</option>
+        <option value="Takraw">Takraw</option>
+      </select>
+    </label><br><br>
+
+    <label>Tim A:
+      <input type="text" name="timA" required>
+    </label>
+    <label>Skor A:
+      <input type="number" name="skorA" required>
+    </label><br><br>
+
+    <label>Tim B:
+      <input type="text" name="timB" required>
+    </label>
+    <label>Skor B:
+      <input type="number" name="skorB" required>
+    </label><br><br>
+
+    <button type="submit">Simpan Skor</button>
+  </form>
+
+  <div id="hasilSkor"></div>
+
+  <script>
+    const hasilSkor = document.getElementById("hasilSkor");
+    const poinKelas = JSON.parse(localStorage.getItem("poinKelas")) || {};
+
+    document.getElementById("formSkor").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const cabang = this.cabang.value;
+      const timA = this.timA.value.toUpperCase();
+      const skorA = parseInt(this.skorA.value);
+      const timB = this.timB.value.toUpperCase();
+      const skorB = parseInt(this.skorB.value);
+
+      let poinA = 0, poinB = 0;
+      if (skorA > skorB) {
+        poinA = 3;
+      } else if (skorA < skorB) {
+        poinB = 3;
+      } else {
+        poinA = poinB = 1;
+      }
+
+      poinKelas[timA] = (poinKelas[timA] || 0) + poinA;
+      poinKelas[timB] = (poinKelas[timB] || 0) + poinB;
+
+      localStorage.setItem("poinKelas", JSON.stringify(poinKelas));
+
+      hasilSkor.innerHTML = `<p><strong>${timA}</strong> ${skorA} - ${skorB} <strong>${timB}</strong><br>
+      Poin: ${timA} = ${poinA}, ${timB} = ${poinB}</p>`;
+    });
+  </script>
+</body>
+</html>

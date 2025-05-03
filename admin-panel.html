@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel PORSENI</title>
+</head>
+<body>
+  <h2>Rekap Poin Semua Tim</h2>
+  <table border="1" id="rekapTable">
+    <thead>
+      <tr><th>Kelas</th><th>Total Poin</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Juara Umum</h3>
+  <ol id="juaraUmumList"></ol>
+
+  <script>
+    const poinKelas = JSON.parse(localStorage.getItem("poinKelas")) || {};
+    const entries = Object.entries(poinKelas);
+    entries.sort((a, b) => b[1] - a[1]);
+
+    const tbody = document.querySelector("#rekapTable tbody");
+    const juaraList = document.getElementById("juaraUmumList");
+
+    entries.forEach(([kelas, poin], index) => {
+      const row = `<tr><td>${kelas}</td><td>${poin}</td></tr>`;
+      tbody.innerHTML += row;
+
+      if (index < 3) {
+        const li = document.createElement("li");
+        li.textContent = `${kelas} (${poin} poin)`;
+        juaraList.appendChild(li);
+      }
+    });
+  </script>
+</body>
+</html>
