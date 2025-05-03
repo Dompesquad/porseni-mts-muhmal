@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digital Scoring PORSENI</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; margin: 0; padding: 1rem; }
+    h1 { text-align: center; }
+    form, table, .controls { max-width: 900px; margin: 1rem auto; }
+    input, select, button { padding: 0.5rem; margin: 0.3rem; border-radius: 5px; border: 1px solid #ccc; }
+    button { cursor: pointer; background: #007bff; color: white; border: none; }
+    button:hover { background: #0056b3; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: center; }
+    .passed { background-color: #d4edda; }
+    .failed { background-color: #f8d7da; }
+    .filter-bar { text-align: center; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Digital Scoring PORSENI</h1>
+
+  <form id="scoreForm">
+    <label>Kelas:
+      <select id="kelas">
+        <option>VII.1</option><option>VII.2</option><option>VII.3</option>
+        <option>VIII.1</option><option>VIII.2</option><option>VIII.3</option>
+        <option>IX.1</option><option>IX.2</option><option>IX.3</option>
+      </select>
+    </label>
+
+    <label>Lomba:
+      <select id="lomba">
+        <option>Futsal</option><option>Voli Putra</option><option>Voli Putri</option>
+        <option>Sepak Takraw</option><option>Bulutangkis Solo</option>
+        <option>Bulutangkis Ganda</option><option>Menyanyi</option>
+        <option>Puisi</option><option>Memasak</option>
+      </select>
+    </label>
+
+    <label>Skor:
+      <input type="number" id="skor" min="0" max="100" required />
+    </label>
+
+    <button type="submit">Simpan Nilai</button>
+  </form>
+
+  <div class="filter-bar">
+    <label>Filter Kelas:
+      <select id="filterKelas">
+        <option value="">Semua</option>
+        <option>VII.1</option><option>VII.2</option><option>VII.3</option>
+        <option>VIII.1</option><option>VIII.2</option><option>VIII.3</option>
+        <option>IX.1</option><option>IX.2</option><option>IX.3</option>
+      </select>
+    </label>
+
+    <label>Filter Lomba:
+      <select id="filterLomba">
+        <option value="">Semua</option>
+        <option>Futsal</option><option>Voli Putra</option><option>Voli Putri</option>
+        <option>Sepak Takraw</option><option>Bulutangkis Solo</option>
+        <option>Bulutangkis Ganda</option><option>Menyanyi</option>
+        <option>Puisi</option><option>Memasak</option>
+      </select>
+    </label>
+
+    <button onclick="exportCSV()">📤 Ekspor CSV</button>
+    <button onclick="resetData()" style="background:#dc3545">🗑️ Reset Semua</button>
+  </div>
+
+  <table id="scoreTable">
+    <thead>
+      <tr>
+        <th>Kelas</th>
+        <th>Lomba</th>
+        <th>Skor</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <table id="totalTable">
+    <thead>
+      <tr>
+        <th>Kelas</th>
+        <th>Total Skor</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById("scoreForm");
+    const tableBody = document.querySelector("#scoreTable tbody");
+    const totalBody = document.querySelector("#totalTable tbody");
+    const filterKelas = document.getElementById("filterKelas");
+    const filterLomba = document.getElementById("filterLomba");
+
+    let data = JSON.parse(localStorage.getItem("porseniScores")) || [];
+
+    function saveData() {
+      localStorage.setItem("porseniScores", JSON.stringify(data));
+      renderTables();
+    }
+
+    function renderTables() {
+      tableBody.innerHTML = "";
+      totalBody.innerHTML = "";
+
+      const filtered = data.filter(d =>
+        (filterKelas.value === "" || d.kelas === filterKelas.value) &&
+        (filterLomba.value === "" || d.lomba === filterLomba.value)
+      );
+
+      filtered.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.className = (["Menyanyi", "Puisi", "Memasak"].includes(row.lomba))
+          ? (row.skor >= 70 ? "passed" : "failed")
+          : "";
+
+        tr.innerHTML = `
+          <td>${row.kelas}</td>
+          <td>${row.lomba}</td>
+          <td>${row.skor}</td>
+          <td>${["Menyanyi", "Puisi", "Memasak"].includes(row.lomba)
+            ? (row.skor >= 70 ? "LULUS" : "TIDAK LULUS HAHA")
+            : "-"}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+
+      const totals = {};
+      data.forEach(({ kelas, skor }) => {
+        if (!totals[kelas]) totals[kelas] = 0;
+        totals[kelas] += skor;
+      });
+
+      Object.keys(totals).sort().forEach(kelas => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${kelas}</td><td><strong>${totals[kelas]}</strong></td>`;
+        totalBody.appendChild(tr);
+      });
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const kelas = document.getElementById("kelas").value;
+      const lomba = document.getElementById("lomba").value;
+      const skor = parseInt(document.getElementById("skor").value);
+
+      const existing = data.findIndex(d => d.kelas === kelas && d.lomba === lomba);
+      if (existing !== -1) {
+        data[existing].skor = skor;
+      } else {
+        data.push({ kelas, lomba, skor });
+      }
+
+      saveData();
+      form.reset();
+    });
+
+    filterKelas.addEventListener("change", renderTables);
+    filterLomba.addEventListener("change", renderTables);
+
+    function resetData() {
+      if (confirm("Yakin ingin menghapus semua data?")) {
+        localStorage.removeItem("porseniScores");
+        data = [];
+        renderTables();
+      }
+    }
+
+    function exportCSV() {
+      const rows = [["Kelas", "Lomba", "Skor"]];
+      data.forEach(row => rows.push([row.kelas, row.lomba, row.skor]));
+      const csv = rows.map(e => e.join(",")).join("\n");
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "skor_porseni.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    renderTables();
+  </script>
+</body>
+</html>
