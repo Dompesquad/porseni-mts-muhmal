@@ -1,92 +1,159 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard PORSENI</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Klasemen PORSENI</title>
     <style>
-        /* Styling untuk Form Kode Akses */
-        .akses-form {
-            width: 300px;
-            margin: 100px auto;
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f0f5;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
             text-align: center;
+            color: #333;
         }
-
-        .akses-form input {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+        .klasemen-section {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
         }
-
-        .akses-form button {
-            width: 85%;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
             padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
             background-color: #4CAF50;
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
         }
-
-        .akses-form button:hover {
-            background-color: #45a049;
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
-
-        #dashboard {
-            display: none;
+        .footer {
             text-align: center;
-            margin-top: 20px;
-            font-size: 20px;
-        }
-
-        #error {
-            font-size: 14px;
-            margin-top: 10px;
-            color: red;
-            display: none;
+            margin-top: 40px;
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <!-- Bagian Form Kode Akses -->
-    <div id="aksesForm" class="akses-form">
-        <h2>Masukkan Kode Akses</h2>
-        <input type="password" id="kodeAkses" placeholder="Masukkan Kode Akses">
-        <button onclick="verifikasiAkses()">Masuk</button>
-        <p id="error">Kode akses salah! Coba lagi.</p>
+    <h1>Klasemen Real-Time PORSENI</h1>
+
+    <div class="klasemen-section">
+        <h2>Klasemen Olahraga</h2>
+        <table id="klasemenOlahraga">
+            <thead>
+                <tr>
+                    <th>Posisi</th>
+                    <th>Tim</th>
+                    <th>Menang</th>
+                    <th>Seri</th>
+                    <th>Kalah</th>
+                    <th>Poin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Diisi oleh JS -->
+            </tbody>
+        </table>
     </div>
 
-    <!-- Bagian Dashboard -->
-    <div id="dashboard">
-        <h1>Dashboard PORSENI</h1>
-        <p>Selamat datang di dashboard!</p>
-        <!-- Konten lainnya di dashboard -->
+    <div class="klasemen-section">
+        <h2>Klasemen Seni</h2>
+        <table id="klasemenSeni">
+            <thead>
+                <tr>
+                    <th>Posisi</th>
+                    <th>Tim</th>
+                    <th>Skor Rata-rata</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Diisi oleh JS -->
+            </tbody>
+        </table>
     </div>
+
+    <div class="footer">&copy; 2025 PORSENI MTS Muhammadiyah Malino</div>
 
     <script>
-        // Kode akses yang benar
-        const kodeAksesValid = "123456"; // Ganti dengan kode akses yang diinginkan
+        function tampilkanKlasemen() {
+            // Ambil data dari localStorage
+            const skorOlahraga = JSON.parse(localStorage.getItem("skorOlahraga")) || [];
+            const nilaiSeni = JSON.parse(localStorage.getItem("nilaiSeni")) || [];
 
-        // Fungsi untuk verifikasi kode akses
-        function verifikasiAkses() {
-            const kodeAksesInput = document.getElementById('kodeAkses').value;
-            const errorMessage = document.getElementById('error');
-            
-            if (kodeAksesInput === kodeAksesValid) {
-                // Sembunyikan form kode akses dan tampilkan dashboard
-                document.getElementById('aksesForm').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-            } else {
-                // Tampilkan pesan error jika kode salah
-                errorMessage.style.display = 'block';
-            }
+            // === KLASEMEN OLAHRAGA ===
+            const poinTim = {};
+
+            skorOlahraga.forEach(match => {
+                const { timA, timB, skorA, skorB } = match;
+                if (!poinTim[timA]) poinTim[timA] = { menang: 0, seri: 0, kalah: 0, poin: 0 };
+                if (!poinTim[timB]) poinTim[timB] = { menang: 0, seri: 0, kalah: 0, poin: 0 };
+
+                if (skorA > skorB) {
+                    poinTim[timA].menang++; poinTim[timA].poin += 3;
+                    poinTim[timB].kalah++;
+                } else if (skorA < skorB) {
+                    poinTim[timB].menang++; poinTim[timB].poin += 3;
+                    poinTim[timA].kalah++;
+                } else {
+                    poinTim[timA].seri++; poinTim[timB].seri++;
+                    poinTim[timA].poin += 1; poinTim[timB].poin += 1;
+                }
+            });
+
+            const klasemenOlahraga = Object.keys(poinTim).map(tim => ({
+                tim,
+                ...poinTim[tim]
+            })).sort((a, b) => b.poin - a.poin);
+
+            const tbodyO = document.querySelector('#klasemenOlahraga tbody');
+            klasemenOlahraga.forEach((tim, i) => {
+                tbodyO.innerHTML += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${tim.tim}</td>
+                        <td>${tim.menang}</td>
+                        <td>${tim.seri}</td>
+                        <td>${tim.kalah}</td>
+                        <td><strong>${tim.poin}</strong></td>
+                    </tr>`;
+            });
+
+            // === KLASEMEN SENI ===
+            const nilaiPerTim = {};
+            nilaiSeni.forEach(({ tim, nilai }) => {
+                if (!nilaiPerTim[tim]) nilaiPerTim[tim] = [];
+                nilaiPerTim[tim].push(nilai);
+            });
+
+            const klasemenSeni = Object.entries(nilaiPerTim).map(([tim, daftarNilai]) => ({
+                tim,
+                rata: (daftarNilai.reduce((a, b) => a + b, 0) / daftarNilai.length).toFixed(2)
+            })).sort((a, b) => b.rata - a.rata);
+
+            const tbodyS = document.querySelector('#klasemenSeni tbody');
+            klasemenSeni.forEach((tim, i) => {
+                tbodyS.innerHTML += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${tim.tim}</td>
+                        <td><strong>${tim.rata}</strong></td>
+                    </tr>`;
+            });
         }
+
+        tampilkanKlasemen();
     </script>
 </body>
 </html>
