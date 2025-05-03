@@ -1,48 +1,92 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard PORSENI</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #eef;
-      padding: 30px;
-      text-align: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard PORSENI</title>
+    <style>
+        /* Styling untuk Form Kode Akses */
+        .akses-form {
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-    h1 {
-      color: #333;
-    }
+        .akses-form input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
 
-    a button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+        .akses-form button {
+            width: 85%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    a button:hover {
-      background-color: #218838;
-    }
-  </style>
+        .akses-form button:hover {
+            background-color: #45a049;
+        }
+
+        #dashboard {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        #error {
+            font-size: 14px;
+            margin-top: 10px;
+            color: red;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <nav>
-  <a href="index.html">Dashboard</a>
-  <a href="input-nilai.html">Input Nilai Seni</a>
-  <a href="input-skor.html">Input Skor Olahraga</a>
-  <a href="admin-panel.html">Admin Panel</a>
-</nav>
+    <!-- Bagian Form Kode Akses -->
+    <div id="aksesForm" class="akses-form">
+        <h2>Masukkan Kode Akses</h2>
+        <input type="password" id="kodeAkses" placeholder="Masukkan Kode Akses">
+        <button onclick="verifikasiAkses()">Masuk</button>
+        <p id="error">Kode akses salah! Coba lagi.</p>
+    </div>
 
-  <h1>Selamat Datang di Dashboard PORSENI!</h1>
-  <p>Silakan lanjut ke halaman input nilai:</p>
-  <a href="input-nilai.html">
-    <button>Masuk ke Halaman Input Nilai</button>
-  </a>
+    <!-- Bagian Dashboard -->
+    <div id="dashboard">
+        <h1>Dashboard PORSENI</h1>
+        <p>Selamat datang di dashboard!</p>
+        <!-- Konten lainnya di dashboard -->
+    </div>
+
+    <script>
+        // Kode akses yang benar
+        const kodeAksesValid = "123456"; // Ganti dengan kode akses yang diinginkan
+
+        // Fungsi untuk verifikasi kode akses
+        function verifikasiAkses() {
+            const kodeAksesInput = document.getElementById('kodeAkses').value;
+            const errorMessage = document.getElementById('error');
+            
+            if (kodeAksesInput === kodeAksesValid) {
+                // Sembunyikan form kode akses dan tampilkan dashboard
+                document.getElementById('aksesForm').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } else {
+                // Tampilkan pesan error jika kode salah
+                errorMessage.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
