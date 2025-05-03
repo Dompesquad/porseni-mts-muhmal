@@ -2,137 +2,148 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Input Skor PORSENI</title>
+  <title>Input Skor Olahraga</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f2f4f7;
+      margin: 0;
+      padding: 0;
     }
     nav {
-      background-color: #4CAF50;
+      background: #006699;
       padding: 10px;
       text-align: center;
     }
     nav a {
       color: white;
-      padding: 14px 20px;
       text-decoration: none;
       margin: 0 10px;
-      font-size: 18px;
+      font-weight: bold;
     }
     nav a:hover {
-      background-color: #45a049;
+      text-decoration: underline;
     }
-    .form-container {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #f4f4f4;
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 30px;
       border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    .form-container input,
-    .form-container select,
-    .form-container button {
-      padding: 10px;
-      margin: 10px 0;
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 15px 0 5px;
+    }
+    input, select, button {
       width: 100%;
-      max-width: 300px;
+      padding: 10px;
+      margin-top: 3px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
-    .form-container button {
-      background-color: #4CAF50;
+    button {
+      background-color: #28a745;
       color: white;
-      border: none;
-      border-radius: 4px;
+      font-weight: bold;
       cursor: pointer;
+      margin-top: 20px;
     }
-    .form-container button:hover {
-      background-color: #45a049;
+    button:hover {
+      background-color: #218838;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <!-- Menu Navigasi -->
-<nav>
-  <a href="index.html">Dashboard</a>
-  <a href="input-nilai.html">Input Nilai Seni</a>
-  <a href="input-skor.html">Input Skor Olahraga</a>
-  <a href="admin-panel.html">Admin Panel</a>
-</nav>
+  <nav>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="input-nilai.html">🎨 Input Nilai Seni</a>
+    <a href="input-skor.html">⚽ Input Skor Olahraga</a>
+    <a href="admin-panel.html">🗂️ Admin Panel</a>
+  </nav>
 
-
-  <div class="form-container">
-    <h2>Input Skor Pertandingan</h2>
-    <form id="inputSkorForm">
-      <label for="kelas1">Kelas 1:</label>
-      <select id="kelas1" required>
-        <option value="VII.1">VII.1</option>
-        <option value="VII.2">VII.2</option>
-        <option value="VII.3">VII.3</option>
-        <option value="VIII.1">VIII.1</option>
-        <option value="VIII.2">VIII.2</option>
-        <option value="VIII.3">VIII.3</option>
-        <option value="IX.1">IX.1</option>
-        <option value="IX.2">IX.2</option>
-        <option value="IX.3">IX.3</option>
+  <div class="container">
+    <h2>Input Skor Olahraga</h2>
+    <form id="formSkor">
+      <label>Cabang Olahraga:</label>
+      <select id="olahraga" required>
+        <option value="">-- Pilih Cabang --</option>
+        <option value="Futsal Putra">Futsal Putra</option>
+        <option value="Bulutangkis">Bulutangkis</option>
+        <option value="Sepak Takraw Putra">Sepak Takraw Putra</option>
+        <option value="Voli Putra">Voli Putra</option>
+        <option value="Voli Putri">Voli Putri</option>
       </select>
 
-      <label for="kelas2">Kelas 2:</label>
-      <select id="kelas2" required>
-        <option value="VII.1">VII.1</option>
-        <option value="VII.2">VII.2</option>
-        <option value="VII.3">VII.3</option>
-        <option value="VIII.1">VIII.1</option>
-        <option value="VIII.2">VIII.2</option>
-        <option value="VIII.3">VIII.3</option>
-        <option value="IX.1">IX.1</option>
-        <option value="IX.2">IX.2</option>
-        <option value="IX.3">IX.3</option>
-      </select>
+      <div id="bulutangkis-submenu" class="hidden">
+        <label>Kategori Bulutangkis:</label>
+        <select id="kategoriBulutangkis">
+          <option value="Putra Solo">Putra - Solo</option>
+          <option value="Putra Ganda">Putra - Ganda</option>
+          <option value="Putri Solo">Putri - Solo</option>
+          <option value="Putri Ganda">Putri - Ganda</option>
+        </select>
+      </div>
 
-      <label for="skor1">Skor Kelas 1:</label>
-      <input type="number" id="skor1" required>
+      <label>Tim A:</label>
+      <input type="text" id="timA" required>
 
-      <label for="skor2">Skor Kelas 2:</label>
-      <input type="number" id="skor2" required>
+      <label>Skor Tim A:</label>
+      <input type="number" id="skorA" required>
 
-      <button type="submit">Input Skor</button>
+      <label>Tim B:</label>
+      <input type="text" id="timB" required>
+
+      <label>Skor Tim B:</label>
+      <input type="number" id="skorB" required>
+
+      <button type="submit">💾 Simpan Skor</button>
     </form>
   </div>
 
   <script>
-    // Fungsi untuk menghitung poin berdasarkan hasil pertandingan
-    document.getElementById("inputSkorForm").addEventListener("submit", function(e) {
+    const olahragaSelect = document.getElementById("olahraga");
+    const bulutangkisMenu = document.getElementById("bulutangkis-submenu");
+
+    olahragaSelect.addEventListener("change", function () {
+      if (this.value === "Bulutangkis") {
+        bulutangkisMenu.classList.remove("hidden");
+      } else {
+        bulutangkisMenu.classList.add("hidden");
+      }
+    });
+
+    document.getElementById("formSkor").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const kelas1 = document.getElementById("kelas1").value;
-      const kelas2 = document.getElementById("kelas2").value;
-      const skor1 = parseInt(document.getElementById("skor1").value);
-      const skor2 = parseInt(document.getElementById("skor2").value);
+      const olahraga = olahragaSelect.value;
+      const kategori = olahraga === "Bulutangkis" ? 
+          document.getElementById("kategoriBulutangkis").value : olahraga;
 
-      let poinKelas1 = 0;
-      let poinKelas2 = 0;
+      const timA = document.getElementById("timA").value;
+      const skorA = parseInt(document.getElementById("skorA").value);
+      const timB = document.getElementById("timB").value;
+      const skorB = parseInt(document.getElementById("skorB").value);
 
-      // Tentukan pemenang dan pemberian poin
-      if (skor1 > skor2) {
-        poinKelas1 = 3;
-        poinKelas2 = 0;
-      } else if (skor2 > skor1) {
-        poinKelas1 = 0;
-        poinKelas2 = 3;
-      } else {
-        poinKelas1 = 1;
-        poinKelas2 = 1;
-      }
+      let hasil = "";
+      if (skorA > skorB) hasil = `${timA} menang dan dapat 3 poin`;
+      else if (skorA < skorB) hasil = `${timB} menang dan dapat 3 poin`;
+      else hasil = `Seri, kedua tim dapat 1 poin`;
 
-      // Simpan hasil skor ke localStorage
-      let poinKelas = JSON.parse(localStorage.getItem("poinKelas")) || {};
-      poinKelas[kelas1] = (poinKelas[kelas1] || 0) + poinKelas1;
-      poinKelas[kelas2] = (poinKelas[kelas2] || 0) + poinKelas2;
-
-      localStorage.setItem("poinKelas", JSON.stringify(poinKelas));
-
-      alert(`Skor berhasil dimasukkan! ${kelas1}: ${skor1} - ${kelas2}: ${skor2}`);
-
-      // Kosongkan form setelah submit
-      document.getElementById("inputSkorForm").reset();
+      alert(`✅ Skor Tersimpan!\nCabang: ${kategori}\n${timA} ${skorA} - ${skorB} ${timB}\n➡️ ${hasil}`);
+      
+      this.reset();
+      bulutangkisMenu.classList.add("hidden");
     });
   </script>
 </body>
