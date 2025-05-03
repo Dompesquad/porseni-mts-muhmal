@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <script>
-  if (sessionStorage.getItem("aksesDisetujui") !== "true") {
-    window.location.href = "akses.html"; // redirect jika belum login
-  }
-</script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Digital Scoring PORSENI</title>
@@ -23,6 +17,12 @@
     .failed { background-color: #f8d7da; }
     .filter-bar { text-align: center; margin: 1rem 0; }
   </style>
+  <script>
+  if (sessionStorage.getItem("aksesDisetujui") !== "true") {
+    window.location.href = "akses.html";
+  }
+</script>
+
 </head>
 <body>
   <nav>
