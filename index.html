@@ -22,6 +22,32 @@
     nav a:hover {
       background-color: #45a049;
     }
+    .form-container {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f4f4f4;
+      border-radius: 8px;
+    }
+    .form-container input {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      max-width: 300px;
+    }
+    .form-container button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .score-board {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -32,10 +58,67 @@
     <a href="admin-panel.html">Admin Panel</a>
   </nav>
 
-  <!-- Konten Halaman -->
-  <h1>Selamat datang di Dashboard PORSENI</h1>
-  <p>Gunakan menu di atas untuk mengakses halaman lainnya.</p>
+  <!-- Form Kode Akses -->
+  <div class="form-container">
+    <h2>Login dengan Kode Akses</h2>
+    <form id="loginForm">
+      <input type="password" id="kodeAkses" placeholder="Masukkan Kode Akses" required>
+      <button type="submit">Login</button>
+    </form>
+    <p id="loginStatus"></p>
+  </div>
 
-  <!-- Konten Dashboard lainnya bisa kamu tambahkan di sini -->
+  <!-- Digital Scoring -->
+  <div class="score-board">
+    <h2>Rekap Poin</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Kelas</th>
+          <th>Total Poin</th>
+        </tr>
+      </thead>
+      <tbody id="scoreTable">
+        <!-- Data akan dimasukkan di sini -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Validasi Kode Akses
+    const kodeAksesForm = document.getElementById('loginForm');
+    const loginStatus = document.getElementById('loginStatus');
+    const validKodeAkses = "admin123"; // Ganti dengan kode akses yang valid
+
+    kodeAksesForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const inputKodeAkses = document.getElementById('kodeAkses').value;
+
+      if (inputKodeAkses === validKodeAkses) {
+        loginStatus.textContent = "Login Berhasil!";
+        loginStatus.style.color = "green";
+      } else {
+        loginStatus.textContent = "Kode Akses Salah!";
+        loginStatus.style.color = "red";
+      }
+    });
+
+    // Menampilkan Data Rekap Skor
+    const poinKelas = JSON.parse(localStorage.getItem("poinKelas")) || {};
+    const scoreTable = document.getElementById('scoreTable');
+
+    Object.entries(poinKelas).forEach(([kelas, poin]) => {
+      const row = document.createElement("tr");
+      const kelasCell = document.createElement("td");
+      const poinCell = document.createElement("td");
+
+      kelasCell.textContent = kelas;
+      poinCell.textContent = poin;
+
+      row.appendChild(kelasCell);
+      row.appendChild(poinCell);
+      scoreTable.appendChild(row);
+    });
+  </script>
 </body>
 </html>
