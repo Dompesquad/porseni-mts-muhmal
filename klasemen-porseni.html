@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Klasemen Real-Time</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a1b9a, #00796b);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      margin-top: 50px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: #fff;
+      text-align: left;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+      border-bottom: 3px solid #00796b;
+      padding-bottom: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #fff;
+      font-size: 18px;
+    }
+
+    th {
+      background-color: #00796b;
+      color: white;
+      border-bottom: 3px solid #004d40;
+    }
+
+    td {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    tr:hover {
+      background-color: #004d40;
+    }
+
+    button {
+      background: #00796b;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.3s;
+      margin-top: 30px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:hover {
+      background-color: #004d40;
+      transform: scale(1.05);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      margin-bottom: 30px;
+    }
+
+    .card h3 {
+      font-size: 22px;
+      color: #00796b;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Klasemen Real-Time Kejuaraan PORSENI</h1>
+
+  <div class="container">
+    <!-- Klasemen Olahraga -->
+    <div class="card">
+      <h3 class="section-title">Klasemen Olahraga</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Tim</th>
+            <th>Poin</th>
+          </tr>
+        </thead>
+        <tbody id="klasemen-olahraga">
+          <!-- Data klasemen olahraga akan ditampilkan di sini -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Klasemen Seni -->
+    <div class="card">
+      <h3 class="section-title">Klasemen Seni</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Peserta</th>
+            <th>Skor</th>
+          </tr>
+        </thead>
+        <tbody id="klasemen-seni">
+          <!-- Data klasemen seni akan ditampilkan di sini -->
+        </tbody>
+      </table>
+    </div>
+
+    <button onclick="updateKlasemen()">Update Klasemen</button>
+  </div>
+
+  <script>
+    // Simulasi Data Klasemen Olahraga dan Seni
+    let klasemenOlahraga = [
+      { tim: "Vii1", poin: 0 },
+      { tim: "Vii2", poin: 0 },
+      { tim: "Viii1", poin: 0 },
+      { tim: "Viii2", poin: 0 },
+    ];
+
+    let klasemenSeni = [
+      { nama: "Siswa A", skor: 0 },
+      { nama: "Siswa B", skor: 0 },
+    ];
+
+    // Menyimpan data klasemen ke localStorage
+    localStorage.setItem("klasemenOlahraga", JSON.stringify(klasemenOlahraga));
+    localStorage.setItem("klasemenSeni", JSON.stringify(klasemenSeni));
+
+    // Fungsi untuk menampilkan Klasemen Olahraga
+    function tampilkanKlasemenOlahraga() {
+      const klasemenContainer = document.getElementById("klasemen-olahraga");
+      klasemenContainer.innerHTML = "";
+
+      klasemenOlahraga.forEach(data => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${data.tim}</td>
+          <td>${data.poin}</td>
+        `;
+        klasemenContainer.appendChild(tr);
+      });
+    }
+
+    // Fungsi untuk menampilkan Klasemen Seni
+    function tampilkanKlasemenSeni() {
+      const klasemenContainer = document.getElementById("klasemen-seni");
+      klasemenContainer.innerHTML = "";
+
+      klasemenSeni.forEach(data => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${data.nama}</td>
+          <td>${data.skor}</td>
+        `;
+        klasemenContainer.appendChild(tr);
+      });
+    }
+
+    // Fungsi untuk update klasemen
+    function updateKlasemen() {
+      // Misalnya kita ingin menambah poin olahraga untuk tim
+      klasemenOlahraga[0].poin += 3; // Vii1 menang
+      klasemenOlahraga[1].poin += 0; // Vii2 kalah
+
+      // Simulasi update skor seni
+      klasemenSeni[0].skor += 8; // Siswa A mendapatkan skor 8
+      klasemenSeni[1].skor += 7; // Siswa B mendapatkan skor 7
+
+      // Simpan hasil klasemen ke localStorage
+      localStorage.setItem("klasemenOlahraga", JSON.stringify(klasemenOlahraga));
+      localStorage.setItem("klasemenSeni", JSON.stringify(klasemenSeni));
+
+      // Menampilkan klasemen terbaru
+      tampilkanKlasemenOlahraga();
+      tampilkanKlasemenSeni();
+    }
+
+    // Inisialisasi tampilan klasemen
+    tampilkanKlasemenOlahraga();
+    tampilkanKlasemenSeni();
+  </script>
+
+</body>
+</html>
