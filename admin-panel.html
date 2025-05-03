@@ -2,45 +2,184 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Panel PORSENI</title>
+  <title>Admin Panel - Hasil Kejuaraan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #00796b;
+      margin-bottom: 30px;
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #00796b;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #004d40;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+    th {
+      background-color: #00796b;
+      color: white;
+    }
+    td {
+      background-color: #f9f9f9;
+    }
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #00796b;
+      border-bottom: 2px solid #00796b;
+      padding-bottom: 10px;
+    }
+    .table-container {
+      margin-bottom: 40px;
+    }
+    .table-container td {
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
-  <nav>
-  <a href="index.html">Dashboard</a>
-  <a href="input-nilai.html">Input Nilai Seni</a>
-  <a href="input-skor.html">Input Skor Olahraga</a>
-  <a href="admin-panel.html">Admin Panel</a>
-</nav>
+  <h1>Admin Panel - Rekap Semua Kejuaraan</h1>
 
-  <h2>Rekap Poin Semua Tim</h2>
-  <table border="1" id="rekapTable">
-    <thead>
-      <tr><th>Kelas</th><th>Total Poin</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <div class="container">
+    <div class="button-container">
+      <button onclick="exportToExcel()">Ekspor ke Excel</button>
+    </div>
 
-  <h3>Juara Umum</h3>
-  <ol id="juaraUmumList"></ol>
+    <div id="hasil-olahraga" class="table-container">
+      <h2 class="section-title">Olahraga</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Cabang</th>
+            <th>Tim A</th>
+            <th>Skor</th>
+            <th>Tim B</th>
+            <th>Pemenang</th>
+          </tr>
+        </thead>
+        <tbody id="data-olahraga">
+          <!-- Data olahraga akan ditampilkan di sini -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="hasil-seni" class="table-container">
+      <h2 class="section-title">Seni</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Cabang</th>
+            <th>Nama Peserta</th>
+            <th>Kelas</th>
+            <th>Skor</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody id="data-seni">
+          <!-- Data seni akan ditampilkan di sini -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <script>
-    const poinKelas = JSON.parse(localStorage.getItem("poinKelas")) || {};
-    const entries = Object.entries(poinKelas);
-    entries.sort((a, b) => b[1] - a[1]);
+    // Simulasi data dari localStorage
+    const dataOlahraga = JSON.parse(localStorage.getItem("skorOlahraga")) || [];
+    const dataSeni = JSON.parse(localStorage.getItem("nilaiSeni")) || [];
 
-    const tbody = document.querySelector("#rekapTable tbody");
-    const juaraList = document.getElementById("juaraUmumList");
+    const tbodyOlahraga = document.getElementById("data-olahraga");
+    const tbodySeni = document.getElementById("data-seni");
 
-    entries.forEach(([kelas, poin], index) => {
-      const row = `<tr><td>${kelas}</td><td>${poin}</td></tr>`;
-      tbody.innerHTML += row;
-
-      if (index < 3) {
-        const li = document.createElement("li");
-        li.textContent = `${kelas} (${poin} poin)`;
-        juaraList.appendChild(li);
-      }
+    // Tampilkan hasil olahraga
+    dataOlahraga.forEach(data => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${data.cabang}</td>
+        <td>${data.timA}</td>
+        <td>${data.skorA} - ${data.skorB}</td>
+        <td>${data.timB}</td>
+        <td>${data.pemenang}</td>
+      `;
+      tbodyOlahraga.appendChild(tr);
     });
+
+    // Tampilkan hasil seni
+    dataSeni.forEach(data => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${data.cabang}</td>
+        <td>${data.nama}</td>
+        <td>${data.kelas}</td>
+        <td>${data.skor}</td>
+        <td>${data.keterangan}</td>
+      `;
+      tbodySeni.appendChild(tr);
+    });
+
+    // Fungsi untuk ekspor ke Excel
+    function exportToExcel() {
+      let tableData = "Cabang\tTim A\tSkor\tTim B\tPemenang\n";
+
+      dataOlahraga.forEach(item => {
+        tableData += `${item.cabang}\t${item.timA}\t${item.skorA}-${item.skorB}\t${item.timB}\t${item.pemenang}\n`;
+      });
+
+      tableData += "\nCabang\tNama Peserta\tKelas\tSkor\tKeterangan\n";
+
+      dataSeni.forEach(item => {
+        tableData += `${item.cabang}\t${item.nama}\t${item.kelas}\t${item.skor}\t${item.keterangan}\n`;
+      });
+
+      // Buat file Excel
+      const blob = new Blob([tableData], { type: "application/vnd.ms-excel" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "hasil_kejuaraan_porseni.xls";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   </script>
 </body>
 </html>
